@@ -1,0 +1,11 @@
+services:
+  tensorflow: 
+    container_name: "tensorflow-py"
+    user: root
+    build: 
+      context:  .
+    volumes:
+    - ./app:/app/app
+    - ./tests:/app/tests
+    ports: 
+      - "8080:8080"

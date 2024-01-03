@@ -1,0 +1,9 @@
+.venv
+.pytest_cache
+
+/colab-notebook
+
+README.md
+
+.gitignore
+.coverage

@@ -1,0 +1,8 @@
+fastapi
+uvicorn 
+opencv-python
+wget
+pytest
+pytest-cov
+pydantic-settings
+httpx
