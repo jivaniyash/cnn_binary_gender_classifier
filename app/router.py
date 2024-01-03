@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Path, Depends, HTTPException
 from app.models import ImageURLIn, ClassificationResult
 
-import tensorflow as tf
+from tensorflow as keras
 # import matplotlib.pyplot as plt
-from tensorflow.keras import models
-import cv2
+from keras import models
+from keras.preprocessing import image
+# import cv2
 import wget
 
 router = APIRouter(
@@ -24,22 +25,25 @@ pipeline = models.load_model('image-classifier-f-m.keras')
 def predict_image(data: ImageURLIn):
     img_url = data.img_url
     # return ClassificationResult(img_url=img_url)
-    file_name = 'image.jpg'
+    # file_name = 'image.jpg'
     try:
         # print('Downloading ...')
 
-        wget.download(img_url, file_name)
+        img = wget.download(img_url)
         # print('\n Download Complete')
     except Exception as e:
-        print(e)
-        raise HTTPException(status_code=422, detail=f'Error downloading image. Please check the url - {file_name} #### {img_url}')
+        # print(e)
+        # raise HTTPException(status_code=403, detail=f'Error downloading image. Please check the url - {img} :####: {img_url}')
+        return e
 
-    img = cv2.imread(file_name)
+    # img = cv2.imread(file_name)
 
     # plt.imshow(img)
 
-    img = cv2.resize(img, (64,64))
-    test_img = img.reshape((1,64,64,3))
+    # img_np = cv2.resize(img, (64,64))
+
+    img_np = image.img_to_array(image.load_img(img, target_size=(64,64)))
+    test_img = img_np.reshape((1,64,64,3))
 
     try:
         y = pipeline(test_img/64, training=False)
