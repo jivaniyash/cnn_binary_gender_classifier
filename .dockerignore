@@ -7,3 +7,5 @@ README.md
 
 .gitignore
 .coverage
+
+**/__pycache__
