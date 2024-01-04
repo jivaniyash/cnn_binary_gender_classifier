@@ -17,8 +17,7 @@ def test_model_prediction() -> None:
     headers = {"Content-Type": "application/json"}
 
     response = client.post(f"/classify/", content=content, headers=headers)
-    print(response.text)
-    assert response.status_code == 200
+    assert response.status_code == 200 # since there is not database connected to store image data
     assert response.json() == {'img_url':img_url,
                                'img_class':"Male",
                                'img_pred_prob':float(0.9912407398223877)}
