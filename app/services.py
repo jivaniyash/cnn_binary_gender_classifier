@@ -1,8 +1,7 @@
-from tensorflow as keras
+from tensorflow import keras
 # import matplotlib.pyplot as plt
 from keras import models
 from keras.preprocessing import image
-# import cv2
 import wget
 
 def run_pipeline(img_url:str):
@@ -12,18 +11,17 @@ def run_pipeline(img_url:str):
     try:
         img = wget.download(img_url)
     except Exception as e:
-        return "Problem Downloading Image", 0.0
+        return f"Problem Downloading Image-{e}", 0.0
 
     img_np = image.img_to_array(image.load_img(img, target_size=(64,64)))
     test_img = img_np.reshape((1,64,64,3))
 
     try:
-        y = pipeline(test_img/64, training=False)
+        y = pipeline(test_img/255., training=False)
         out = y.numpy()[0][0]
         output = round(out)
-    except:
-        # print('Issue with output prediction')
-        return "Issue with output prediction - Change Pipeline code", 0.0
+    except Exception as e:
+        return f"Issue with output prediction - Change Pipeline code - {e}", 0.0
         
     if output == 0:
         prob = 1-out # probability of predicting output
@@ -32,7 +30,6 @@ def run_pipeline(img_url:str):
         prob = out
         img_class = "Male"
     else:
-        # print('there is some problem - output:- ', str(output))
         return "Issue with output prediction - Change output variable", 0.0 
     
-    return img_class, prob 
+    return img_class, float(prob) 

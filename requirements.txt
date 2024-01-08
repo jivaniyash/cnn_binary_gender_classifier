@@ -6,3 +6,5 @@ pytest
 pytest-cov
 pydantic-settings
 httpx
+pymongo
+pillow

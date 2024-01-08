@@ -1,11 +1,20 @@
 services:
-  tensorflow: 
-    container_name: "tensorflow-py"
-    user: root
-    build: 
-      context:  .
-    volumes:
-    - ./app:/app/app
-    - ./tests:/app/tests
-    ports: 
-      - "8080:8080"
+    tensorflow: 
+      container_name: "tensorflow"
+      user: root
+      build: 
+        context:  .
+      volumes:
+      - ./app:/app/app
+      - ./tests:/app/tests
+      ports: 
+        - "8080:8080"
+
+    mongo: # mongo for storing document
+      image: mongo
+      container_name: "mongo_db"
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: username 
+        MONGO_INITDB_ROOT_PASSWORD: password
+      ports:
+        - 27017:27017
