@@ -1,17 +1,14 @@
 import pymongo
+from app.settings import MongoDBConnectionSettings
 
 def create_mongo_connection() -> pymongo.MongoClient:
-    # MongoDB connection details
-    host = 'mongo_db' # container name
-    port = 27017
-    username = 'username'
-    password = 'password'
+    mongo_connection = MongoDBConnectionSettings()
 
     # Create a MongoClient
-    mongo_client = pymongo.MongoClient(host=host, 
-                                    port=port,
-                                    username=username,
-                                    password=password)
+    mongo_client = pymongo.MongoClient(host=mongo_connection.host, 
+                                    port=mongo_connection.port,
+                                    username=mongo_connection.username,
+                                    password=mongo_connection.password)
     
     return mongo_client
 

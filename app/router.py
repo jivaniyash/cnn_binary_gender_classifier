@@ -30,7 +30,6 @@ def classify_image(data: ImageURLIn, response:Response):
     img_url = data.img_url # fetch img_url from client request
 
     # find if doc is inserted in the collections
-    # doc = router.get(f'/classify/?img_url={img_url}')
     doc = retreive_prediction(img_url)
 
     if doc != {'status':'Doc not found'}: # if doc is found in mongodb 
