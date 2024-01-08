@@ -22,10 +22,9 @@ def insert_one_doc(img_url:str, img_class:str, prob:float):
     db_name = 'image'
     coll_name = 'logs'
 
-    if db_name not in mongo_client.list_database_names():
+    if db_name not in mongo_client.list_database_names(): # create db & collection
         image_db = mongo_client[db_name]
         coll = image_db[coll_name]
-
     else:
         db = mongo_client.image
         coll = db.logs
@@ -38,9 +37,28 @@ def insert_one_doc(img_url:str, img_class:str, prob:float):
                 'img_pred_prob': prob}
     
     doc = coll.insert_one(document)
+    if doc.acknowledged: # add doc_status key
+        coll.update_one(filter={'img_url':img_url},update={'$set':{'doc_status':'inserted'}})
+    return document
 
-    return doc.acknowledged
+def find_doc(img_url: str):
 
+    mongo_client = create_mongo_connection()
 
+    db_name = 'image'
+    coll_name = 'logs'
 
+    if db_name not in mongo_client.list_database_names(): # create db & collection
+        image_db = mongo_client[db_name]
+        coll = image_db[coll_name]
+    else:
+        db = mongo_client.image
+        coll = db.logs
+
+    doc = coll.find_one({'img_url':img_url})
+
+    if doc:
+        return True, doc
+    else:
+        return False, None
 

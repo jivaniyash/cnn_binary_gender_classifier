@@ -1,6 +1,6 @@
 services:
     tensorflow: 
-      container_name: "tensorflow-py"
+      container_name: "tensorflow"
       user: root
       build: 
         context:  .

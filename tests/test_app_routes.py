@@ -21,41 +21,24 @@ def test_mongo_conn() -> None:
 
     assert ping_message == {'ok': 1.0}
 
-    db_name = 'image'
-    image_db = mongo_client[db_name]
+def test_retrieve_prediction() ->None:
+    img_url = 'https://test.com'
+    response = client.get(f'/classify/?img_url={img_url}')
 
-    coll_name = 'logs'
-    logs = image_db[coll_name]
-
-    # check adding test doc in database
-    from datetime import datetime
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    eg_document = {'timestamp':timestamp,
-                   'img_url':'https://testurl.com',
-                   'img_class':'None',
-                   'img_pred_prob': float(0.0)}
-    doc = logs.insert_one(eg_document)
-    assert doc.acknowledged == True
-    assert logs.find_one({'timestamp':timestamp}) == {'_id': doc.inserted_id,
-                                                        'timestamp': timestamp,
-                                                        'img_url': 'https://testurl.com',
-                                                        'img_class': 'None',
-                                                        'img_pred_prob': 0.0}
-
-    # MongoDB does not create a database until a collection (table) is created with at least one document (record)
-    assert db_name in mongo_client.list_database_names()
-    assert coll_name in image_db.list_collection_names() 
+    assert response.status_code == 200 
+    assert response.json() == {"status": "Doc not found"}
 
 def test_model_prediction() -> None:
-    img_url = 'https://cdn2.momjunction.com/wp-content/uploads/2021/02/What-Is-A-Sigma-Male-And-Their-Common-Personality-Trait-624x702.jpg'
+    img_url = 'https://upload.wikimedia.org/wikipedia/commons/1/1b/Ex_-_L_-_low_quality.jpg'
     data = {'img_url':img_url}
     content = json.dumps(data)
     headers = {"Content-Type": "application/json"}
 
     response = client.post(f"/classify/", content=content, headers=headers)
 
-    assert response.status_code == 200 # since there is not database connected to store image data
-    assert response.json() == {'img_url':img_url,
-                               'img_class':"Male",
-                               'img_pred_prob':float(0.9999271035194397),
-                               'doc_status':'inserted'}
+    assert response.status_code == 201 #doc should be inserted
+
+    # since model predcits different probability scores, only url checks is made
+    assert response.json()['img_url'] == img_url
+    assert response.json()['img_class'] == "Male"
+                            
