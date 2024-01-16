@@ -12,6 +12,14 @@ def create_mongo_connection() -> pymongo.MongoClient:
     
     return mongo_client
 
+def check_mongo_connection():
+    mongo_client = create_mongo_connection()
+    try:
+        ping_message = mongo_client.admin.command('ping')
+    except:
+        ping_message = {'ok':0.0}
+    return ping_message
+
 def insert_one_doc(img_url:str, img_class:str, prob:float, model:str):
 
     mongo_client = create_mongo_connection()
