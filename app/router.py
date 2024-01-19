@@ -9,11 +9,11 @@ router = APIRouter(
     include_in_schema=True,
 )
 
-@router.get("/ping/{ping_message}")
-def home(ping_message):
+@router.get("/ping/")
+def custom_ping_message(ping_message: str = Query(description="Add your custom message to check if its returning the same message")):
     return {'ping_message':ping_message}
 
-@router.get("/ping_mongo/")
+@router.get("/ping_mongo/", description="Try it out to check if mongodb is connected")
 def ping_mongo():
 
     ping_message = check_mongo_connection()
