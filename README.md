@@ -12,7 +12,7 @@ This Project is used to predict gender - male/female & hand-written digit in an 
 - Gender Model has 6-layered architecture. Model is trained using 4-CNN, 2-Dense-Fully connected layer.
 - Digit Classifier Model has 3-layered architecture - trained using [https://www.tensorflow.org/datasets/catalog/mnist](MNIST) dataset
 
-If you want to run project using Gradio, follow the steps - https://github.com/jivaniyash/image_classifier_app/tree/gradio
+If you want to run project using Gradio, follow the steps - https://github.com/jivaniyash/image_classifier_app/tree/gradio or can open huggingface - https://huggingface.co/spaces/jivaniyash/demo-image-classifier
 
 If you want to run project, it is currently depolyed using gcloud run - https://tensorflow-kq4trppvsa-uc.a.run.app/
 
